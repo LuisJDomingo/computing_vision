@@ -3,7 +3,7 @@ import mediapipe as mp
 
 # Inicializar MediaPipe Hands
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
+hands = mp_hands.Hands(min_detection_confidence=0.9, min_tracking_confidence=0.9)
 mp_drawing = mp.solutions.drawing_utils
 
 # Función para contar dedos levantados
@@ -12,14 +12,15 @@ def contar_dedos(hand_landmarks):
     
     # Coordenadas de los puntos relevantes
     tips = [4, 8, 12, 16, 20]  # Puntas de los dedos
-    dips = [3, 7, 11, 15, 19]  # Articulaciones base
+    intermedios = [3, 7, 11, 15, 19]  # Puntos intermedios de los dedos
+    dips = [2, 6, 10, 14, 18]  # Articulaciones base
     
-    # Comprobar si cada dedo está levantado
-    for tip, dip in zip(tips, dips):
-        if hand_landmarks.landmark[tip].y < hand_landmarks.landmark[dip].y:
+     # Comprobar si cada dedo está levantado
+    for tip, intermedio, dip in zip(tips, intermedios, dips):
+        if hand_landmarks.landmark[tip].y < hand_landmarks.landmark[intermedio].y < hand_landmarks.landmark[dip].y:
             dedos_levantados += 1
-    
-    # Especial para el pulgar: Compara x en lugar de y
+
+    # Especial para el pulgar (usando su eje X y Y)
     if hand_landmarks.landmark[4].x < hand_landmarks.landmark[3].x:
         dedos_levantados += 1
 
@@ -32,7 +33,9 @@ while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         break
-
+    
+    # Invertir la imagen horizontalmente (efecto espejo)
+    frame = cv2.flip(frame, 1)
     # Convertir BGR a RGB para MediaPipe
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     result = hands.process(rgb_frame)
