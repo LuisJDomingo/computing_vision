@@ -33,5 +33,6 @@ Aplicaciones interactivas: Usa la detección para controlar el ratón o realizar
 ¿Quieres ayudar para implementar alguna funcionalidad específica o mejorar la aplicación? 😊
 
 
-Aplicaciones posibles:
+**Aplicaciones posibles**:
+
 face detection: sistema de reconocimiento facial para control de accesos
