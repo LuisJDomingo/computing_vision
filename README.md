@@ -31,3 +31,7 @@ Interfaz gráfica: Usa frameworks como PyQt o Tkinter para añadir controles y u
 Guardar datos: Captura imágenes o coordenadas de las manos para análisis posterior.
 Aplicaciones interactivas: Usa la detección para controlar el ratón o realizar gestos específicos para ejecutar comandos.
 ¿Quieres ayudar para implementar alguna funcionalidad específica o mejorar la aplicación? 😊
+
+
+Aplicaciones posibles:
+face detection: sistema de reconocimiento facial para control de accesos
