@@ -119,7 +119,7 @@ class HandDetector():
         
         return length, frame, [x1, y1, x2, y2, cx, cy]
 
-def main():
+'''def main():
     p_time = 0
     c_time = 0
     #--------------------------leemos la webcam------------------------------------------------------
@@ -164,6 +164,6 @@ def main():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    main()
+    main()'''
     
     
