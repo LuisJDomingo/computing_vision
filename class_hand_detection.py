@@ -56,7 +56,7 @@ class HandDetector():
                 cx, cy = int(lm.x*width), int(lm.y * height)
                 xlist.append(cx)
                 ylist.append(cy)
-                self.list.append(id, cx, cy)
+                self.list.append((id, cx, cy))
                 if dibujo:
                     cv2.circle(frame, (cx, cy), 5, (0,0,0), cv2.FILLED) # dibuja u circulo
             
@@ -110,7 +110,7 @@ def main():
     #--------------------------deteccion de las manos---------------------------------------------
     while True:
         ret, frame = cap.read()
-        frame = detector.handCounter(frame, dibujo) 
+        frame = detector.handCounter(frame, dibujo=True) 
         list, bbox = detector.findPosition(frame)
         
         c_time = time.time()
