@@ -70,16 +70,22 @@ class HandDetector():
     
     def fingerCounter(self):
         fingers = []
-        if self.list[self.tip[0][1] > self.list[self-tip[0]-1][1]]:
+        # Verifica si hay puntos detectados
+        if not self.list:
+            return []
+        print(self.list)
+        
+        if self.list[self.tip[0][1] > self.list[self.tip[0]-1][1]]:
             fingers.append(1)
         else:
             fingers.append(0)
         for id in range(1, 5):
             
-            if self.list[self.tip[id][2] < self.list[self-tip[id]-2][2]]:
+            if self.list[self.tip[id][2] < self.list[self.tip[id]-2][2]]:
                 fingers.append(1)
             else:
                 fingers.append(0)
+        print(fingers)
         return fingers   
     
     #----------------Funcion para detectar la distancia entre los dedos------------------
@@ -104,14 +110,27 @@ def main():
     c_time = 0
     #--------------------------leemos la webcam------------------------------------------------------
     cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Error: No se pudo abrir la cámara.")
+        return
     #----------------------------creamos el objeto con la clase----------------------------------------
     detector = HandDetector()
     
     #--------------------------deteccion de las manos---------------------------------------------
     while True:
         ret, frame = cap.read()
+        if not ret:
+            print("Error al capturar el cuadro de la cámara")
+            continue
+        # Invertir la imagen horizontalmente
+        frame = cv2.flip(frame, 1)
+        
         frame = detector.handCounter(frame, dibujo=True) 
         list, bbox = detector.findPosition(frame)
+        
+        if list:  # Verifica si hay datos válidos
+            fingers = detector.fingerCounter()  # Llama a la función para contar dedos
+            print(f"Dedos levantados: {fingers}")
         
         c_time = time.time()
         fps = 1/(c_time-p_time)
@@ -122,7 +141,7 @@ def main():
         k = cv2.waitKey(1)
         
         if k == 27:
-            brake
+            break
 
     cap.release()
     cv2.destroyAllWindows()
