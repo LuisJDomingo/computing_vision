@@ -1,6 +1,8 @@
 import cv2
+import math
 import mediapipe as mp
-
+import time
+'''
 # Inicializar MediaPipe Hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.9, min_tracking_confidence=0.9)
@@ -68,3 +70,5 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+'''
+
