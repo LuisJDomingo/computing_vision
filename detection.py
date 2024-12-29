@@ -1,8 +1,4 @@
-import cv2
-import math
-import mediapipe as mp
-import time
-'''
+import class_hand_detection
 # Inicializar MediaPipe Hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.9, min_tracking_confidence=0.9)
@@ -30,7 +26,7 @@ def contar_dedos(hand_landmarks, hand_type):
             dedos_levantados += 1
 
     return dedos_levantados
-
+'''
 # Captura de video
 cap = cv2.VideoCapture(0)
 
@@ -70,5 +66,5 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
-'''
+
 

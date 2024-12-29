@@ -87,4 +87,16 @@ class HandDetector():
         
         return length, frame, [x1, y1, x2, y2, cx, cy]
 
-        
+def main():
+    p_time = 0
+    c_time = 0
+    #--------------------------leemos la webcam------------------------------------------------------
+    cap = cv2.VideoCapture(0)
+    #----------------------------creamos el objeto con la clase----------------------------------------
+    detector = HandDetector()
+    
+    #--------------------------deteccion de las manos---------------------------------------------
+    while True:
+        ret, frame = cap.read()
+        frame = detector.handCounter(frame, draw) 
+        list  
