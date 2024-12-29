@@ -68,25 +68,39 @@ class HandDetector():
         
         return self.list, bbox
     
-    def fingerCounter(self):
+    def fingerCounter(self, frame):
         fingers = []
         # Verifica si hay puntos detectados
         if not self.list:
             return []
         print(self.list)
-        
-        if self.list[self.tip[0][1] > self.list[self.tip[0]-1][1]]:
-            fingers.append(1)
-        else:
-            fingers.append(0)
-        for id in range(1, 5):
-            
-            if self.list[self.tip[id][2] < self.list[self.tip[id]-2][2]]:
-                fingers.append(1)
+         # Identifica si la mano es izquierda o derecha usando el punto de la muñeca (landmark 0)
+        wrist = self.list[0]  # Coordenada de la muñeca (landmark 0)
+        is_left_hand = wrist[1] < frame.shape[1] // 2  # Si la muñeca está en la mitad izquierda de la imagen, es la mano izquierda
+
+        # Verificación del pulgar (dedo 0)
+        if is_left_hand:
+            # Para la mano izquierda, comparamos los puntos 4 (punta) y 3 (base) del pulgar
+            if self.list[self.tip[0]][2] > self.list[self.tip[0] - 1][2]:
+                fingers.append(1)  # Pulgar levantado
             else:
-                fingers.append(0)
+                fingers.append(0)  # Pulgar cerrado
+        else:
+            # Para la mano derecha, comparamos los puntos 4 (punta) y 3 (base) del pulgar
+            if self.list[self.tip[0]][2] < self.list[self.tip[0] - 1][2]:
+                fingers.append(1)  # Pulgar levantado
+            else:
+                fingers.append(0)  # Pulgar cerrado
+
+        # Verificación de los otros dedos (dedos 1 a 4)
+        for id in range(1, 5):
+            if self.list[self.tip[id]][2] < self.list[self.tip[id] - 2][2]:  # La punta del dedo debe estar por encima de la segunda falange
+                fingers.append(1)  # Dedo levantado
+            else:
+                fingers.append(0)  # Dedo cerrado
+
         print(fingers)
-        return fingers   
+        return fingers  
     
     #----------------Funcion para detectar la distancia entre los dedos------------------
     #----------------Esta funcion tiene aplicaciones como subir y bajar el volumen--------------
@@ -129,14 +143,17 @@ def main():
         list, bbox = detector.findPosition(frame)
         
         if list:  # Verifica si hay datos válidos
-            fingers = detector.fingerCounter()  # Llama a la función para contar dedos
+            fingers = detector.fingerCounter(frame)  # Llama a la función para contar dedos
             print(f"Dedos levantados: {fingers}")
-        
+            cv2.putText(frame, f'Dedos levantados: {sum(fingers)}', (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
         c_time = time.time()
         fps = 1/(c_time-p_time)
         p_time = c_time
         
-        cv2.putText(frame, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_COMPLEX, 3, (255, 0, 255), 3)
+        #cv2.putText(frame, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_COMPLEX, 3, (255, 0, 255), 3)
+        #cv2.putText(frame, f'Dedos levantados: {sum(fingers)}', (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
         cv2.imshow("Manos", frame)
         k = cv2.waitKey(1)
         
