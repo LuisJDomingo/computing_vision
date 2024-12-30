@@ -18,10 +18,17 @@ def main():
         ret, frame = cap.read()
         if not ret:
             print("Error al capturar el cuadro de la cámara")
-            continue
+            break
         # Invertir la imagen horizontalmente
         frame = cv2.flip(frame, 1)
         
+        # Agregar texto con instrucciones en la parte superior derecha
+        instructions = "Presiona 'q' para salir"
+        text_size = cv2.getTextSize(instructions, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
+        text_x = frame.shape[1] - text_size[0] - 10  # Posicionar 10 px del borde derecho
+        text_y = 30  # Altura fija
+        cv2.putText(frame, instructions, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        # Procesamiento con el detector
         frame = detector.handCounter(frame, dibujo=True) 
         list, bbox = detector.findPosition(frame)
         
@@ -30,17 +37,19 @@ def main():
             print(f"Dedos levantados: {fingers}")
             cv2.putText(frame, f'Dedos levantados: {sum(fingers)}', (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
 
+        # Calcular FPS
         c_time = time.time()
-        fps = 1/(c_time-p_time)
+        fps = 1 / (c_time - p_time)
         p_time = c_time
         
-        #cv2.putText(frame, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_COMPLEX, 3, (255, 0, 255), 3)
-        #cv2.putText(frame, f'Dedos levantados: {sum(fingers)}', (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-
+        # Mostrar el frame y el FPS
+        # cv2.putText(frame, f'FPS: {int(fps)}', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
         cv2.imshow("Manos", frame)
-        k = cv2.waitKey(1)
-        
-        if k == 27:
+
+        # Detectar si se presiona 'q' o se cierra la ventana
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+        if cv2.getWindowProperty("Manos", cv2.WND_PROP_VISIBLE) < 1:
             break
 
     cap.release()
