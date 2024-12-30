@@ -9,11 +9,18 @@ output_folder = "landmarks_output"
 # Crear carpeta para las imágenes con puntos de referencia si no existe
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
+    print(f"Carpeta '{input_folder}' creada.")
+else:
+    print(f"Carpeta '{input_folder}' ya existe.")
 
 # Cargar el detector de caras de dlib y el predictor de puntos de referencia
 detector = dlib.get_frontal_face_detector()
 predictor_path = "shape_predictor_68_face_landmarks.dat"
-predictor = dlib.shape_predictor(predictor_path)
+# Asegúrate de que la ruta sea correcta
+try:
+    predictor = dlib.shape_predictor(predictor_path)
+except RuntimeError as e:
+    print(f"Error al abrir el archivo: {e}")
 
 # Procesar cada imagen de la carpeta
 for image_name in os.listdir(input_folder):
