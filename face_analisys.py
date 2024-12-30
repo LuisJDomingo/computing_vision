@@ -38,10 +38,16 @@ while True:
             result = face_recognition.compare_faces([face_frame_encodings], face_image_encodings)
             print("result: ", result)
             top, right, bottom, left = face_location  # Extrae las coordenadas
-            
-            cv2.rectangle(frame, (left, right, right, bottom), (0, 255, 0 ), -1)
-            cv2.rectangle(frame, (left, top, right, bottom), (0, 255, 0), 2)
-            cv2.putText(frame, "nombre", (bottom, right+20), 2, 0.7, (255, 255, 255), 1)
+            if result[0] == True:
+                text = "conocido"
+                color = (125,228,0)
+            else:
+                text = "desconocido"
+                color = (50, 50, 255)
+                
+            cv2.rectangle(frame, (bottom, right, top, right), color, -1)
+            cv2.rectangle(frame, (left, top, right, bottom), color, 2)
+            cv2.putText(frame, text, (bottom, right+20 ), 2, 0.7, (255, 255, 255), 1 )
     
     cv2.imshow("frame", frame)
     # Salir del loop si se presiona la tecla 'q'
