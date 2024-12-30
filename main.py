@@ -6,7 +6,9 @@ def main():
     p_time = 0
     c_time = 0
     #--------------------------leemos la webcam------------------------------------------------------
+    # # Abre la cámara
     cap = cv2.VideoCapture(0)
+    
     if not cap.isOpened():
         print("Error: No se pudo abrir la cámara.")
         return

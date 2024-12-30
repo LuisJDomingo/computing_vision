@@ -3,14 +3,20 @@ import os
 
 # Crear carpeta para almacenar las caras si no existe
 output_folder = "faces"
+# Crear carpeta para las imágenes con puntos de referencia si no existe
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
+    print(f"Carpeta '{output_folder}' creada.")
+else:
+    print(f"Carpeta '{output_folder}' ya existe.")
 
 # Cargar el clasificador en cascada de OpenCV para detección de caras
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 # Captura de video
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)  # Establece el ancho de la imagen
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)  # Establece la altura de la imagen
 
 while cap.isOpened():
     ret, frame = cap.read()
