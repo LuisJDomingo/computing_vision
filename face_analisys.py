@@ -3,23 +3,15 @@ import face_recognition
 import os
 import imutils
 
-'''coge las imagenes de la carpeta faces
-    las examina una por una.
-    dentro de un bucle for in
-'''
-print("--------------------------")
+
 img = cv2.imread("faces/face_0.jpg")
 if img is None:
     print(f"Error al cargar la imagen: {img}")
-face_loc = face_recognition.face_locations(img)[0]
-print("face_loc: ", face_loc)
+face_loc = face_recognition.face_locations(img)[0] # esto devuelve la localizacion de la cara dentro la imagen
+# print("face_loc: ", face_loc)
 
-face_image_encodings = face_recognition.face_encodings(img, known_face_locations=[face_loc])[0]
-print("face_image_encodins: ", face_image_encodings)
-
-#cv2.imshow("imagen", img)
-#cv2.waitKey(0)
-#cv2.destroyAllWindows()
+face_image_encodings = face_recognition.face_encodings(img, known_face_locations=[face_loc])[0] # retorna un vector con los puntos caracterisiticos del rostro
+# print("face_image_encodins: ", face_image_encodings)
 
 ############# Reconocimiento facial mediante video streaming
 
@@ -47,7 +39,7 @@ while True:
                 
             cv2.rectangle(frame, (bottom, right, top, right), color, -1)
             cv2.rectangle(frame, (left, top, right, bottom), color, 2)
-            cv2.putText(frame, text, (bottom, right+20 ), 2, 0.7, (255, 255, 255), 1 )
+            cv2.putText(frame, text, (bottom, right+20 ), 2, 0.7, (255, 255, 255), 1)
     
     cv2.imshow("frame", frame)
     # Salir del loop si se presiona la tecla 'q'

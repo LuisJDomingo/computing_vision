@@ -1,5 +1,6 @@
 import cv2
 import os
+import face_recognition
 
 # Crear carpeta para almacenar las caras si no existe
 output_folder = "faces"
@@ -27,14 +28,11 @@ while cap.isOpened():
     # Invertir la imagen horizontalmente
     frame = cv2.flip(frame, 1)
     
-    # Convertir a escala de grises para la detección facial
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Detectar caras en la imagen
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
+    face_loc = face_recognition.face_locations(frame) # esto devuelve la localizacion de la cara dentro la imagen
+    face_image_encodings = face_recognition.face_encodings(frame, known_face_locations=[face_loc]) # retorna un vector con los puntos caracterisiticos del rostro
+    
     # Dibujar rectángulos alrededor de las caras detectadas y guardar la instantánea
-    for i, (x, y, w, h) in enumerate(faces):
+    for i, (x, y, w, h) in enumerate(face_loc):
         cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
         cv2.putText(frame, "Cara detectada", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 0, 0), 2)
         
