@@ -20,6 +20,8 @@ while True:
     if not ret: break
     frame = cv2.flip(frame, 1)
     
+    
+    
     # mostrar instrucciones por pantalla
     
     instructions = "Presiona 'q' para salir"
