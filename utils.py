@@ -7,6 +7,7 @@ import json
 import base64
 import face_recognition
 import numpy as np
+import pymongo
 
 from pymongo import MongoClient
 
@@ -91,9 +92,6 @@ def upToMongo(json_file):
     client.close()
     
 def downFromMongo(face):
-    # Ruta del archivo JSON
-    json_file_path = r"computing_vision\faces\output.json"
-
     # Configurar la conexión con MongoDB
     mongo_uri = "mongodb://localhost:27017/"  # Cambia a tu URI de MongoDB si usas un servidor remoto
     client = MongoClient(mongo_uri)
@@ -103,12 +101,13 @@ def downFromMongo(face):
     collection = db["faces"]
 
     # Buscar un documento específico (puedes modificar el criterio de búsqueda)
-    # Aquí asumimos que estás buscando el primer documento
-    documento = coleccion.find_one()  # También puedes usar find_one({"campo": valor}) para una búsqueda más específica
+    documento = collection.find_one({"user": face})  # También puedes usar find_one({"campo": valor}) para una búsqueda más específica
 
     if documento:
-        # Acceder al campo que contiene la lista (por ejemplo, "mi_lista")
-        mi_lista = documento.get("mi_lista", [])  # Si no existe, devuelve una lista vacía
-        print("Lista obtenida:", mi_lista)
+        # Acceder al campo que contiene la lista (por ejemplo, "vector_caracteristicas")
+        vector_caracteristicas = documento.get("vector_caracteristicas", [])  # Si no existe, devuelve una lista vacía
+        # print("Lista obtenida:", vector_caracteristicas)
     else:
         print("No se encontró el documento.")
+    
+    return vector_caracteristicas

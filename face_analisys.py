@@ -2,16 +2,13 @@ import cv2
 import face_recognition
 import os
 import imutils
+import numpy as np
+from utils import downFromMongo
 
 
-img = cv2.imread("faces/face_0.jpg")
-if img is None:
-    print(f"Error al cargar la imagen: {img}")
-face_loc = face_recognition.face_locations(img)[0] # esto devuelve la localizacion de la cara dentro la imagen
-# print("face_loc: ", face_loc)
-
-face_image_encodings = face_recognition.face_encodings(img, known_face_locations=[face_loc])[0] # retorna un vector con los puntos caracterisiticos del rostro
-# print("face_image_encodins: ", face_image_encodings)
+user = input("introduzca un nombre de usuario: ")
+face_image_encodings = np.array(downFromMongo(user))
+print(face_image_encodings)
 
 ############# Reconocimiento facial mediante video streaming
 
@@ -28,10 +25,12 @@ while True:
         for face_location in face_locations:
             face_frame_encodings = face_recognition.face_encodings(frame, known_face_locations=[face_location])[0]
             result = face_recognition.compare_faces([face_frame_encodings], face_image_encodings)
-            print("result: ", result)
+            
+            # print("result: ", result)
+            
             top, right, bottom, left = face_location  # Extrae las coordenadas
             if result[0] == True:
-                text = "conocido"
+                text = user
                 color = (125,228,0)
             else:
                 text = "desconocido"
@@ -40,6 +39,7 @@ while True:
             cv2.rectangle(frame, (bottom, right, top, right), color, -1)
             cv2.rectangle(frame, (left, top, right, bottom), color, 2)
             cv2.putText(frame, text, (bottom, right+20 ), 2, 0.7, (255, 255, 255), 1)
+            
     
     cv2.imshow("frame", frame)
     # Salir del loop si se presiona la tecla 'q'
