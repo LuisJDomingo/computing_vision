@@ -1,13 +1,13 @@
 # computing_vision
 aplicacion de vision por computadora
 cuenta el número de dedos levantados en un mano
+reconoce rostros
 
 **stack tecnólogico**
 
 Lenguaje de programación: Python.
 Librerías:
 OpenCV: Para capturar video desde la webcam y procesar imágenes.
-MediaPipe: Una solución de Google para la detección de manos y dedos que incluye modelos de aprendizaje automático preentrenados.
 face_recognognition: para el reconocimiento de los puntos caracterisiticos de la cara.
 Numpy: Para procesar arrays de datos.
 Entorno de desarrollo: Visual Studio Code
