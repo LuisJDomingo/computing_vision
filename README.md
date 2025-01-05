@@ -1,7 +1,7 @@
 # computing_vision
 aplicacion de vision por computadora
 cuenta el número de dedos levantados en un mano
-reconoce rostros
+y reconoce rostros
 
 **stack tecnólogico**
 
